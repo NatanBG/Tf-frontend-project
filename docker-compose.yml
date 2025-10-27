@@ -1,0 +1,118 @@
+services:
+
+
+  #NODE VITE HMR
+  nodevitehmr-container:
+    build:
+      context: .
+      dockerfile: docker/node24-vite-hmr/Dockerfile
+    volumes:
+      - ./resources:/app/resources
+      - nodemodules-project-volume:/app/node_modules
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - IS_CONTAINER=TRUE
+    networks:
+      - app-network
+
+  
+  #NODE VITE COMPILER
+  nodevitecompiler-container:
+    build:
+      context: .
+      dockerfile: docker/node24-vite-compiler/Dockerfile
+    volumes:
+      - public-project-volume:/app/public
+      - ./resources:/app/resources
+      - nodemodules-project-volume:/app/node_modules
+    restart: unless-stopped
+    environment:
+      - IS_CONTAINER=TRUE
+    networks:
+      - app-network
+
+  #NODE WEB
+  nodeweb-container:
+    build:
+      context: .
+      dockerfile: docker/node24-web/Dockerfile.dev
+    env_file: .env
+    volumes:
+      - .:/app
+      - nodemodules-project-volume:/app/node_modules
+    restart: unless-stopped
+    environment:
+      - IS_CONTAINER=TRUE
+      - POSTGRES_HOST=postgres_host
+      - POSTGRES_PORT=5432
+    depends_on:
+      - postgres-container
+    networks:
+      app-network:
+        aliases:
+            - nodeweb_host
+
+  #NODE CLI
+  nodecli-container:
+    build:
+      context: .
+      dockerfile: docker/node24-cli/Dockerfile
+    env_file: .env
+    volumes:
+      - .:/app
+      - nodemodules-project-volume:/app/node_modules
+    environment:
+      - IS_CONTAINER=TRUE
+      - POSTGRES_HOST=postgres_host
+      - POSTGRES_PORT=5432
+    networks:
+      - app-network
+    depends_on:
+      - postgres-container
+
+  #NGINX
+  nginx-container:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/var/www/public
+    depends_on:
+      - nodeweb-container
+    networks:
+      - app-network
+
+  #POSTGRES
+  postgres-container:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: America/Sao_Paulo
+    ports:
+      - "6789:5432"
+    volumes:
+      - pgdata-project-volume:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      app-network:
+        aliases:
+            - postgres_host
+
+
+#OTHERS
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata-project-volume:
+  nodemodules-project-volume:
+  public-project-volume:

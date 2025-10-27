@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aula 09 - React: Estados, Efeitos e Referências</title>
+
+  <link rel="stylesheet" href="./build/app.css">
+</head>
+
+<body class="bg-white text-dark">
+
+  <header class="py-4">
+    <h1 class="container fw-bold fs-2 text-center text-white">
+      Aula 09 - React: Estados, Efeitos e Referências
+    </h1>
+  </header>
+
+  <main class="container my-4 d-flex align-items-center">
+    <div class="card border-0 shadow rounded-4 w-100">
+      <div class="card-body p-0">
+        <ul class="list-group rounded-4 overflow-hidden">
+
+          <!-- 1 -->
+          <li class="list-group-item d-flex align-items-center justify-content-between py-3 list-group-item-action">
+            <div class="d-flex align-items-center">
+              <span class="badge rounded-pill text-bg-primary me-3">1</span>
+              <i class="bi bi-person-badge me-2"></i>
+              <span class="fw-semibold">Inserção de campo <strong>role</strong> e explicação de seu significado (USER | ADMIN).</span>
+            </div>
+            <span class="badge text-bg-light border">backend</span>
+          </li>
+
+          <!-- 2 -->
+          <li class="list-group-item d-flex align-items-center justify-content-between py-3 list-group-item-action">
+            <div class="d-flex align-items-center">
+              <span class="badge rounded-pill text-bg-primary me-3">2</span>
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              <span class="fw-semibold">Rever a inicialização do React, desde a chamada do controlador ou arquivo estático até o componente principal em <code>pages</code>.</span>
+            </div>
+            <span class="badge text-bg-light border">entrypoint</span>
+          </li>
+
+          <!-- 3 -->
+          <li class="list-group-item d-flex align-items-center justify-content-between py-3 list-group-item-action">
+            <div class="d-flex align-items-center">
+              <span class="badge rounded-pill text-bg-primary me-3">3</span>
+              <i class="bi bi-diagram-3 me-2"></i>
+              <span class="fw-semibold">Mostrar a árvore de componentes de <strong>Produtos</strong> e correção do <code>tsconfig</code> / tipagem (<code>tf</code>).</span>
+            </div>
+            <span class="badge text-bg-light border">react</span>
+          </li>
+
+          <!-- 4 -->
+          <li class="list-group-item d-flex align-items-center justify-content-between py-3 list-group-item-action">
+            <div class="d-flex align-items-center">
+              <span class="badge rounded-pill text-bg-primary me-3">4</span>
+              <i class="bi bi-sliders me-2"></i>
+              <span class="fw-semibold">Mostrar o alias <code>@app</code> em <code>./vite.config.js</code> e <code>tsconfig.json</code>.</span>
+            </div>
+            <span class="badge text-bg-light border">config</span>
+          </li>
+
+          <!-- 5 -->
+          <li class="list-group-item d-flex align-items-center justify-content-between py-3 list-group-item-action">
+            <div class="d-flex align-items-center">
+              <span class="badge rounded-pill text-bg-primary me-3">4</span>
+              <i class="bi bi-sliders me-2"></i>
+              <span class="fw-semibold">Mostrar <code>setTimeout(() => {...}, tempo_ms)</code>.</span>
+            </div>
+            <span class="badge text-bg-light border">config</span>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer class="py-3 text-white text-center">
+    <div class="container text-center">Frontend 2025.2</div>
+  </footer>
+
+  <script type="module" src="./build/app.js"></script>
+</body>
+
+</html>
