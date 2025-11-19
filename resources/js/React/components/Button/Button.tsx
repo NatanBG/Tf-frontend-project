@@ -1,10 +1,24 @@
-import { ButtonProps } from "./Button.types";
+import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
+import { ButtonProps, ButtonRef } from "./Button.types";
 
-export default function Button({ children, onClick, classList = "" }: ButtonProps) {
+const Button = forwardRef<ButtonRef, ButtonProps>(({ children, onClick, classList = "" }, ref) => {
+
+    const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
     const clickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.();
     }
+
+    useImperativeHandle(ref, () => {
+        return {
+            disable() {
+                setIsDisabled(true);
+            },
+            enable() {
+                setIsDisabled(false);
+            }
+        }
+    });
 
     const buttonClasses = [
         "btn",
@@ -16,10 +30,14 @@ export default function Button({ children, onClick, classList = "" }: ButtonProp
 
     return (
         <button
+            disabled={isDisabled}
             className={buttonClasses.join(" ")}
             onClick={clickHandler}
         >
             {children}
         </button>
     );
-}
+
+});
+
+export default Button;

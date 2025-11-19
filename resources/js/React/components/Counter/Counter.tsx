@@ -1,11 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Button from "../Button/Button";
 import "./styles.css";
+import { CounterProps, CounterRef } from "./Counter.types";
 
-export default function Counter() {
+export default forwardRef<CounterRef, CounterProps>(function Counter(props, ref) {
     const [quantity, setQuantity] = useState(0);
 
     const inputRef = useRef<HTMLInputElement>(null);
+
+    useImperativeHandle(ref, () => {
+        return {
+            set: (value) => {
+                setQuantity(value);
+            }
+        }
+    });
 
     useEffect(() => {
         inputRef.current?.select();
@@ -63,3 +72,4 @@ export default function Counter() {
         </>
     );
 }
+);

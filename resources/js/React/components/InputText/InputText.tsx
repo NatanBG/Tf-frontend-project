@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { InputTextProps } from "./InputText.types";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { InputTextProps, InputTextRef } from "./InputText.types";
 import { DEBOUNCE_MILISECONDS } from "@app/js/constants";
 
-export default function InputText({ onChange, value = "" }: InputTextProps) {
+export default forwardRef<InputTextRef, InputTextProps>(function InputText({ onChange, value = "" }, ref) {
+
     const [inputValue, setInputValue] = useState<string>(value);
 
     const timerRef = useRef<number>(null);
@@ -11,10 +12,18 @@ export default function InputText({ onChange, value = "" }: InputTextProps) {
         setInputValue(value);
     }, [value]);
 
+    useImperativeHandle(ref, () => {
+        return {
+            set: (value: string) => {
+                setInputValue(value);
+            }
+        }
+    });
+
     useEffect(() => {
         timerRef.current = setTimeout(() => {
             onChange?.(inputValue);
-        }, DEBOUNCE_MILISECONDS);
+        }, 0);
 
         return () => {
             (timerRef.current !== null) && clearTimeout(timerRef.current);
@@ -35,4 +44,4 @@ export default function InputText({ onChange, value = "" }: InputTextProps) {
             onChange={inputChangeHandler}
         />
     );
-}
+});

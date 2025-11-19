@@ -4,3 +4,8 @@ export type ButtonProps = {
     onClick?: () => void;
     classList?: string;
 }
+
+export type ButtonRef = {
+    disable: () => void;
+    enable: () => void;
+}

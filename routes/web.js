@@ -9,13 +9,10 @@ import UserViewController from '../app/Http/Controllers/User/UserViewController.
 import JwtVerifyViewMiddleware from '../app/Http/Middlewares/JwtVerifyViewMiddleware.js';
 import ViewProductController from '../app/Http/Controllers/Product/ViewProductController.js';
 import ViewExampleController from '../app/Http/Controllers/ViewExampleController.js';
-import ViewLoginController from '../app/Http/Controllers/ViewLoginController.js';
 
 export default (function () {
 
     const router = Router();
-
-    router.get('/login', ViewLoginController);
 
     router.get('/users', JwtVerifyViewMiddleware, UserViewController);
 

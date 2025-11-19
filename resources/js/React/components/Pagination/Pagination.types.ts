@@ -1,5 +1,13 @@
-export interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
-    onPageChange: (page: number) => void;
+import { ListApi } from "@app/js/app.types";
+
+export type PaginationProps = {
+    data: ListApi<unknown> | "error" | undefined;
+    onChange?: (page: number) => void;
+}
+
+export type PaginationWithContextProps = {
+    onChange?: (page: number) => void;
+}
+
+export type PaginationRef = {
 }

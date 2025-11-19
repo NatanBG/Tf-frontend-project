@@ -1,27 +1,46 @@
-import { useEffect, useState } from "react";
-import { ProductModel } from "@app/js/app.types";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ListApi, ProductModel } from "@app/js/app.types";
 import { formatDate, formatPrice } from "@app/js/services/helpers";
 import productDeleteApi from "@app/js/services/api/productDeleteApi";
 import { ProductListProps } from "./ProductList.types";
+import Button from "../Button/Button";
+import { ButtonRef } from "../Button/Button.types";
 
 export default function ProductList({ products, onDelete }: ProductListProps) {
 
-    const [data, setData] = useState<ProductModel[] | "error" | undefined>(products);
+    const [data, setData] = useState<ListApi<ProductModel> | "error" | undefined>(products);
+
+    const deleteButtonsRef = useRef<Map<number, ButtonRef>>(new Map);
+
+    const setButtonRef = useCallback((id: number) => (el: ButtonRef | null) => {
+        if (el) {
+            deleteButtonsRef.current.set(id, el);
+            return;
+        }
+
+        deleteButtonsRef.current.delete(id);
+    }, []);
 
     useEffect(() => {
-        setData(products)
+        setData(products);
     }, [products]);
 
+
     const deleteProductHandler = (id: number) => {
-        return async (event: React.MouseEvent<HTMLButtonElement>) => {
+
+        return async () => {
+
+            deleteButtonsRef.current.get(id)?.disable();
             const data = await productDeleteApi(id);
 
             if (data !== null) {
+                deleteButtonsRef.current.get(id)?.enable();
                 return;
             }
 
             onDelete?.();
         }
+
     }
 
     if (!data) {
@@ -37,13 +56,14 @@ export default function ProductList({ products, onDelete }: ProductListProps) {
         return <div className="alert alert-warning">Erro na API.</div>;
     }
 
+
     return (
-        <div className="col-12 col-lg-8">
-            {data.length === 0 ? (
+        <div>
+            {data.rows.length === 0 ? (
                 <div className="alert alert-warning">Nenhum produto encontrado.</div>
             ) : (
                 <div className="row row-cols-1 row-cols-md-2 g-4">
-                    {data.map((product) => {
+                    {data.rows.map((product) => {
                         const id = product.id;
                         return (
                             <div key={id} className="col">
@@ -65,9 +85,14 @@ export default function ProductList({ products, onDelete }: ProductListProps) {
                                     <div className="card-footer bg-white border-0 pt-0">
                                         <div className="d-flex justify-content-between align-items-center">
                                             <span className="badge rounded-pill text-bg-primary">#{product.id}</span>
-                                            <button type="button" className="btn btn-sm btn-outline-danger" onClick={deleteProductHandler(id)}>
+                                            <Button
+                                                key={id}
+                                                ref={setButtonRef(id)}
+                                                onClick={deleteProductHandler(id)}
+                                                classList="btn-danger"
+                                            >
                                                 <i className="fa-solid fa-trash"></i>
-                                            </button>
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>

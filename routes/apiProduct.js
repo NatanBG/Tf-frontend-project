@@ -4,6 +4,8 @@ import CreateProductController from '../app/Http/Controllers/Product/Api/CreateP
 import DeleteProductController from '../app/Http/Controllers/Product/Api/DeleteProductController.js';
 import UpdateProductController from '../app/Http/Controllers/Product/Api/UpdateProductController.js';
 import GetProductController from '../app/Http/Controllers/Product/Api/GetProductController.js';
+import VerifyImage from '../app/Http/Middlewares/VerifyImage.js';
+import UploadPhotoController from '../app/Http/Controllers/Product/Api/UploadPhotoController.js';
 
 export const apiProduct = (function () {
 
@@ -18,6 +20,9 @@ export const apiProduct = (function () {
     router.delete('/:id', DeleteProductController);
 
     router.put('/:id', UpdateProductController);
+
+    // Enviar imagem
+    router.post('/:id/image', VerifyImage, UploadPhotoController);
 
     return router;
 

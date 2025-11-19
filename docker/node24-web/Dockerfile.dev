@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copia arquivos necessários para instalar as dependencia node_modules EM TEMPO DE BUILD
 COPY package*.json ./
-COPY server.js ./
+COPY _server.js ./
 
 # Instala dependências + nodemon para "ouvir" as mudanças
 RUN npm install -g nodemon && npm install
@@ -16,4 +16,4 @@ RUN npm install -g nodemon && npm install
 # EXPOSE 3000
 
 # Comando padrão ao iniciar o container
-ENTRYPOINT ["npm", "run", "dev"]
+ENTRYPOINT ["nodemon", "_server.js"]
